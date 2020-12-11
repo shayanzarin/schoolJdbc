@@ -32,7 +32,6 @@ public class Main {
                 }
                 switchMethod(n);
             }
-            System.out.println("good bye");
         }
 
         public static void switchMethod(int n){
@@ -58,8 +57,9 @@ public class Main {
                     break;
                 case 10:menu();
                     break;
-                default:
-                    System.out.println("Try again!");
+                case 0: System.out.println("good bye");
+                    break;
+                default: System.out.println("Try again!");
             }
         }
 

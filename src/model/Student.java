@@ -1,40 +1,12 @@
 package model;
 
-public class Student {
-    private int id;
-    private String fname;
-    private String lname;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getFname() {
-        return fname;
-    }
-
-    public void setFname(String fname) {
-        this.fname = fname;
-    }
-
-    public String getLname() {
-        return lname;
-    }
-
-    public void setLname(String lname) {
-        this.lname = lname;
-    }
-
+public class Student extends Person {
     @Override
     public String toString() {
         return "Student{" +
-                "ID=" + id +
-                ", First name='" + fname + '\'' +
-                ", Last name='" + lname + '\'' +
+                "ID=" + getId() +
+                ", First name='" + getFname() + '\'' +
+                ", Last name='" + getLname() + '\'' +
                 '}';
     }
 }

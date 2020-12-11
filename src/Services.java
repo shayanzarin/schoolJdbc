@@ -1,10 +1,9 @@
-
 import model.Student;
 import model.Teacher;
 import util.ConnectionFactory;
-
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -44,29 +43,39 @@ public class Services {
             preparedStatement.setString(2,newStudent.getLname());
             preparedStatement.setInt(3,newStudent.getId());
             preparedStatement.executeUpdate();
-            howManyTeachers(newStudent);
+            NumberOfTeachers(newStudent);
             } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
     }
 
-public void printStudentForTeacher() {
-    List<Teacher> teachers=loadStudentForTeacher();
-    for (Teacher t: teachers){
-        System.out.println("student name : "+t.getFname());
-    }
-}
-
-    public void howManyTeachers(Student student){
+    public void NumberOfTeachers(Student student){
         Scanner scanner=new Scanner(System.in);
         while (true){
             System.out.println("Do you want add teacher? 1.yes / 2.no");
-            if (scanner.nextInt() == 2)
-                break;
-            else
-                saveTeacherId(student);
+            int number = 0;
+            try {
+                number=scanner.nextInt();
+                if (number == 2)
+                    break;
+                else if (number > 2 || number < 1){
+                    System.out.println("wrong input!");
+                    NumberOfTeachers(student);
+                }
+                else
+                    saveTeacherId(student);
+            }catch (InputMismatchException inputMismatchException){
+                System.out.println("wrong input!");
+                NumberOfTeachers(student);
+            }if (number == 2)break;
         }
         System.out.println("done!");
+    }
+
+    public <T> void printTable(List<T> tList){
+        for (T t : tList) {
+            System.out.println(t.toString());
+        }
     }
 
     public void saveTeacherId(Student student){
@@ -99,7 +108,7 @@ public void printStudentForTeacher() {
             sqlException.printStackTrace();
         }
     }
-//    DELETE FROM `school`.`student` WHERE (`id` = '7');
+
     public void deleteStudent(){
         Scanner scanner=new Scanner(System.in);
         printTable(loadAllStudent());
@@ -158,7 +167,6 @@ public void printStudentForTeacher() {
         System.out.println("done!");
     }
 
-//    UPDATE `school`.`student` SET `fname` = '11', `lname` = 'hatami2' WHERE (`id` = '7');
     public void editStudent(){
         printTable(loadAllStudent());
         Student student=buildStudent();
@@ -190,9 +198,6 @@ public void printStudentForTeacher() {
             sqlException.printStackTrace();
         }
     }
-
-
-
 
     public List<Student> loadAllStudent() {
         try(Connection connection = ConnectionFactory.getConnection();
@@ -258,39 +263,10 @@ public void printStudentForTeacher() {
         return null;
     }
 
-
-//    select s.fname as studentName, t.fname as teacherName from student s join s_t st on s.id = st.s_id join teacher t on t.id=st.t_id where t.id = ?
-
-    public <T> void printTable(List<T> tList){
-        for (T t : tList) {
-            System.out.println(t.toString());
+    public void printStudentForTeacher() {
+        List<Teacher> teachers=loadStudentForTeacher();
+        for (Teacher t: teachers){
+            System.out.println("student name : "+t.getFname());
         }
     }
-
-
-
 }
-//    Scanner scanner = new Scanner(System.in);
-//    printTable(loadAllTeacher());
-//        System.out.println("Enter teacher id: ");
-//        Teacher teacher = new Teacher();
-//        teacher.setId(scanner.nextInt());
-//        try (Connection connection = ConnectionFactory.getConnection();
-//        PreparedStatement preparedStatement = connection.prepareStatement("select s.fname as studentName, t.fname as teacherName from student s join s_t st on s.id = st.s_id join teacher t on t.id=st.t_id where t.id = ?")){
-//        preparedStatement.setInt(1, teacher.getId());
-//        ResultSet resultSet = preparedStatement.executeQuery();
-//
-//        List<Teacher> teachers = new ArrayList<>();
-//        while (resultSet.next()) {
-//        Teacher teacher1 = new Teacher();
-//        teacher.setFname(resultSet.getString("studentName"));
-//        teacher.setLname(resultSet.getString("teacherName"));
-//        teachers.add(teacher1);
-//        }
-//        return teachers;
-//
-//        } catch (SQLException sqlException) {
-//        sqlException.printStackTrace();
-//
-//        }
-//        return null;
